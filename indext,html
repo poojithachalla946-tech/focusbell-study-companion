@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FocusBell - Smart Study Companion</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2ff;
+  margin: 0;
+  color: #222;
+}
+header {
+  background: #5146e5;
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+.container {
+  max-width: 800px;
+  margin: 25px auto;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px #ddd;
+}
+input, button {
+  padding: 12px;
+  margin: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+button {
+  background: #5146e5;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+li {
+  padding: 10px;
+  margin: 5px;
+  background: #f1f5ff;
+  border-radius: 8px;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🔔 FocusBell</h1>
+<p>Your Smart Study Companion</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>📚 Add Your Subjects</h2>
+<input id="subject" placeholder="Enter subject name">
+<input id="time" type="time">
+<button onclick="addSubject()">Add Subject</button>
+<ul id="subjects"></ul>
+</div>
+
+<div class="card">
+<h2>⏰ Study Reminder</h2>
+<input id="reminder" type="time">
+<input id="task" placeholder="Study / Break / Lunch">
+<button onclick="addReminder()">Set Reminder</button>
+<p id="status"></p>
+</div>
+
+<div class="card">
+<h2>🎤 Voice Reminder</h2>
+<button onclick="speak('Welcome to FocusBell. Happy studying!')">
+Test Voice
+</button>
+</div>
+
+<div class="card">
+<h2>🍱 Daily Routine</h2>
+<p>Lunch: 1:00 PM</p>
+<p>Break: 5:00 PM</p>
+<p>Sleep: 10:00 PM</p>
+</div>
+
+</div>
+
+<script>
+function addSubject() {
+  let subject = document.getElementById("subject").value;
+  let time = document.getElementById("time").value;
+
+  if(subject === "" || time === "") {
+    alert("Enter subject and study time");
+    return;
+  }
+
+  let li = document.createElement("li");
+  li.textContent = subject + " - " + time;
+  document.getElementById("subjects").appendChild(li);
+
+  document.getElementById("subject").value = "";
+}
+
+function speak(message) {
+  let speech = new SpeechSynthesisUtterance(message);
+  speechSynthesis.speak(speech);
+}
+
+function addReminder() {
+  let time = document.getElementById("reminder").value;
+  let task = document.getElementById("task").value;
+
+  if(time === "" || task === "") {
+    alert("Enter reminder time and task");
+    return;
+  }
+
+  document.getElementById("status").textContent =
+    "Reminder set for " + task + " at " + time;
+
+  let reminderTime = time;
+
+  setInterval(function() {
+    let now = new Date();
+    let current = now.getHours().toString().padStart(2,"0") +
+    ":" + now.getMinutes().toString().padStart(2,"0");
+
+    if(current === reminderTime) {
+      speak("It's time for " + task);
+    }
+  }, 60000);
+}
+</script>
+
+</body>
+</html>    
